@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathStatistics", "PathStatistics\PathStatistics.csproj", "{A50BA505-02C4-4955-8BA5-4D7495C410A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A50BA505-02C4-4955-8BA5-4D7495C410A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A50BA505-02C4-4955-8BA5-4D7495C410A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A50BA505-02C4-4955-8BA5-4D7495C410A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A50BA505-02C4-4955-8BA5-4D7495C410A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C63503C-DF10-42FE-BAE0-592D3DA67BAE}
+	EndGlobalSection
+EndGlobal
