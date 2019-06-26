@@ -925,6 +925,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form2";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "计算结果";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.groupBox1.ResumeLayout(false);
