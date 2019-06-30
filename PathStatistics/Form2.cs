@@ -160,7 +160,7 @@ namespace PathStatistics
             //dataGridView1.Columns[2].HeaderText = "截住概率";
             dataGridView1.Columns[0].Width = 70;
             dataGridView1.Columns[1].Width = 70;
-            dataGridView1.Columns[2].Width = 200;
+            dataGridView1.Columns[2].Width = 230;
             dataGridView1.Columns[3].Visible = false;
         }
 
@@ -218,6 +218,35 @@ namespace PathStatistics
             //当前路径的路径字体颜色为红色
             dataGridView1.Rows[_currentPath.Index - 1].Cells[1].Style.ForeColor = Color.Red;
 
+            var x = dataGridView1.Location.X;//当前控件在窗体的X轴位置
+            var y = dataGridView1.Location.Y;//当前控件在窗体的Y轴位置
+
+            var cellx = dataGridView1.GetCellDisplayRectangle(2, _currentPath.Index - 1, true).Left;
+            var celly = dataGridView1.GetCellDisplayRectangle(2, _currentPath.Index - 1, true).Top;
+
+            panelShowPath.Location = new Point(x + cellx, y + celly);
+
+            int cellWidth = this.dataGridView1.GetCellDisplayRectangle(2, _currentPath.Index - 1, true).Width;
+            int cellHeight = this.dataGridView1.GetCellDisplayRectangle(2, _currentPath.Index - 1, true).Height;
+
+            panelShowPath.Width = cellWidth;
+            panelShowPath.Height = cellHeight;
+
+            foreach (var ct in panelShowPath.Controls)
+            {
+                var lbl = ct as Label;
+                if (lbl != null)
+                {
+                    lbl.ForeColor = Color.Black;
+                }
+            }
+
+            labelA.Text = "1";
+            labelB.Text = "1";
+            labelC.Text = "1";
+            labelD.Text = "0";
+            panelShowPath.BringToFront();
+            panelShowPath.Visible = true;
             //路径再加上固定的LM节点，共5个节点
             var routes = _currentPath.Route.ToList();
             routes.Add('L');
@@ -279,6 +308,8 @@ namespace PathStatistics
             _walkPathValues.Clear();
 
             var index = 0;
+            //加入起点
+            routes.Insert(0, 'x');
             for (var i = 0; i < routes.Count; i++)
             {
                 var controls = groupBox1.Controls.Find("panel" + routes[i].ToString(), false);
@@ -323,7 +354,9 @@ namespace PathStatistics
                         PathName = routes[i],
                         Index = index++,
                         LineY = lineY,
-                        VerticalDirection = Direction.Vertical
+                        VerticalDirection = Direction.Vertical,
+                        //到达位置
+                        ArrivePoint = panelCenterPoint
                     };
                     if (i == 0)
                     {
@@ -391,7 +424,9 @@ namespace PathStatistics
                         LineY = lineY,
                         VerticalDirection = Direction.Vertical,
                         StartPoint = _showers[index - 2].EndPoint,
-                        EndPoint = panelCenterPoint
+                        EndPoint = panelCenterPoint,
+                        //到达位置
+                        ArrivePoint = panelCenterPoint
                     };
                     shower.CurrentPoint = shower.StartPoint;
                     lineY.Location = shower.StartPoint;
@@ -420,6 +455,9 @@ namespace PathStatistics
 
             var isPathEnd = false;
 
+            //是否已经到达
+            var isArrive = false;
+
             //垂直向下移动
             if (_currentShower.VerticalDirection == Direction.Vertical)
             {
@@ -433,6 +471,13 @@ namespace PathStatistics
                 {
                     isPathEnd = true;
                 }
+
+                //已经到达
+                if (_currentShower.CurrentPoint.Y == _currentShower.ArrivePoint.Y)
+                {
+                    isArrive = true;
+                }
+
             }
             else//水平移动
             {
@@ -464,6 +509,20 @@ namespace PathStatistics
                 pictureBoxPerson.Location = new Point(_currentShower.CurrentPoint.X - pictureBoxPerson.Width / 2, _currentShower.CurrentPoint.Y + MoveStep - pictureBoxPerson.Height / 2);// _currentShower.CurrentPoint;
             }
 
+            //已经到达
+            if (isArrive)
+            {
+                if (_currentShower.PathName != ' ')
+                {
+                    if (PathParameters.ContainsKey(_currentShower.PathName))
+                    {
+                        //记录走过路径的概率值
+                        _walkPathValues[_currentShower.PathName] = PathParameters[_currentShower.PathName];
+                        CalculatePath();
+                    }
+                }
+            }
+
             //是否已经走到当前路径终点
             if (isPathEnd)
             {
@@ -474,14 +533,10 @@ namespace PathStatistics
                     return;
                 }
 
-                if (_currentShower.PathName != ' ')
-                {
-                    //记录走过路径的概率值
-                    _walkPathValues[_currentShower.PathName] = PathParameters[_currentShower.PathName];
-                    CalculatePath();
-                }
-                _currentShower = _showers[_currentShower.Index + 1]; 
+                _currentShower = _showers[_currentShower.Index + 1];
             }
+
+
         }
 
         /// <summary>
@@ -513,6 +568,26 @@ namespace PathStatistics
 
             dataGridView1.Rows[path.Index - 1].Cells[2].Value = probability;
             dataGridView1.Rows[path.Index - 1].Cells[2].Style.ForeColor = Color.Red;
+
+            labelA.Text = (1 - values[0]).ToString();
+            labelB.Text = (1 - values[1]).ToString();
+            labelC.Text = (1 - values[2]).ToString();
+
+            labelD.Text = sum.ToString();
+
+            var index = route.IndexOf(_currentShower.PathName);
+            switch (index)
+            {
+                case 0:
+                    labelA.ForeColor = Color.Red;
+                    break;
+                case 1:
+                    labelB.ForeColor = Color.Red;
+                    break;
+                case 2:
+                    labelC.ForeColor = Color.Red;
+                    break;
+            }
         }
         #endregion
     }

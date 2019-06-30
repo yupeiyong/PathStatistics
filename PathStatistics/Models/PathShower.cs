@@ -9,12 +9,12 @@ namespace PathStatistics.Models
     public class PathShower
     {
         /// <summary>
-        /// 用一字母表示的路径名称
+        ///     用一字母表示的路径名称
         /// </summary>
         public char PathName { get; set; }
 
         /// <summary>
-        /// 从0开始的索引，指示当前路径展示的顺序
+        ///     从0开始的索引，指示当前路径展示的顺序
         /// </summary>
         public int Index { get; set; }
 
@@ -34,6 +34,11 @@ namespace PathStatistics.Models
         ///     当前点
         /// </summary>
         public Point CurrentPoint { get; set; }
+
+        /// <summary>
+        ///     到达点，表示已经到达指定的位置
+        /// </summary>
+        public Point ArrivePoint { get; set; }
 
         /// <summary>
         ///     横向线条
